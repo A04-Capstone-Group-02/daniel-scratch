@@ -32,6 +32,9 @@ def main():
     df.to_pickle('data/out/data.pkl')
     ProfileReport(df).to_file('data/out/report.html')
 
+    with open(f'data/out/summaries.txt', 'w') as f:
+        f.writelines([f'{summary}\n' for summary in df.summary])
+
 
 if __name__ == '__main__':
     main()
