@@ -4,7 +4,7 @@ from pandas_profiling import ProfileReport
 
 
 def main():
-    # os.system('src/etl.sh')
+    os.system('src/etl.sh')
 
     def normalize(x):
         dictionary = eval(x)
