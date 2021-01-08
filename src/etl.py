@@ -11,6 +11,15 @@ def main():
         if dictionary:
             return list(dictionary.values())
 
+    def clean_summary(summary):
+        return (
+            summary
+            .str.replace('{{.*?}}', '')  # Remove Wikipedia tags
+            .str.replace('http\S+', '')  # Remove URLs
+            .str.replace('\s+', ' ')  # Combine whitespace
+            .str.strip()  # Strip whitespace
+        )
+
     movies = pd.read_csv(
         'data/raw/movie.metadata.tsv',
         converters={'languages': normalize, 'countries': normalize, 'genres': normalize},
@@ -27,7 +36,7 @@ def main():
         header=None,
         index_col='id',
         names='id summary'.split()
-    ).assign(summary=lambda x: x.summary.str.replace('\n', ' ').str.strip())
+    ).assign(summary=lambda x: clean_summary(x.summary))
 
     df = movies.merge(summaries, on='id').sort_values('date').reset_index(drop=True)
     df.to_pickle('data/out/data.pkl')
