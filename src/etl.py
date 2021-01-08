@@ -26,14 +26,15 @@ def main():
         delimiter='\t',
         header=None,
         index_col='id',
-        names='id summary'.split())
+        names='id summary'.split()
+    ).assign(summary=lambda x: x.summary.str.replace('\n', ' '))
 
     df = movies.merge(summaries, on='id').sort_values('date').reset_index(drop=True)
     df.to_pickle('data/out/data.pkl')
     ProfileReport(df).to_file('data/out/report.html')
 
     with open(f'data/out/summaries.txt', 'w') as f:
-        f.writelines([f'{summary}\n' for summary in df.summary])
+        f.write('\n'.join(df.summary))
 
 
 if __name__ == '__main__':
