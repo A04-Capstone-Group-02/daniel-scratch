@@ -27,7 +27,7 @@ def main():
         header=None,
         index_col='id',
         names='id summary'.split()
-    ).assign(summary=lambda x: x.summary.str.replace('\n', ' '))
+    ).assign(summary=lambda x: x.summary.str.replace('\n', ' ').str.strip())
 
     df = movies.merge(summaries, on='id').sort_values('date').reset_index(drop=True)
     df.to_pickle('data/out/data.pkl')
